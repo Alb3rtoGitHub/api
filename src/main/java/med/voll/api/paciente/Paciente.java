@@ -1,6 +1,7 @@
 package med.voll.api.paciente;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Paciente {
     private String email;
     private String telefono;
     private String documentoIdentidad;
+    private Boolean activo;
 
     @Embedded
     private Direccion direccion;
@@ -33,5 +35,22 @@ public class Paciente {
         this.telefono = datosRegistroPaciente.telefono();
         this.documentoIdentidad = datosRegistroPaciente.documentoIdentidad();
         this.direccion = new Direccion(datosRegistroPaciente.direccion());
+        this.activo = true;
+    }
+
+    public void actualizarDatos(DatosActualizarPaciente datosActualizarPaciente) {
+        if (datosActualizarPaciente.nombre() != null) {
+            this.nombre = datosActualizarPaciente.nombre();
+        }
+        if (datosActualizarPaciente.telefono() != null) {
+            this.documentoIdentidad = datosActualizarPaciente.telefono();
+        }
+        if (datosActualizarPaciente.direccion() != null) {
+            this.direccion = direccion.actualizarDatos(datosActualizarPaciente.direccion());
+        }
+    }
+
+    public void desactivarPaciente() {
+        this.activo = false;
     }
 }
