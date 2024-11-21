@@ -35,6 +35,11 @@ public class TokenService {
     }
 
     public String getSubject(String token) {
+        // Valido si el token es nulo
+        if (token == null) {
+            throw new RuntimeException("token null");
+        }
+
         DecodedJWT verifier = null;
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret); // validando firma del token
