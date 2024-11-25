@@ -18,7 +18,6 @@ public class ConsultaController {
     @PostMapping
     @Transactional
     public ResponseEntity reservar(@RequestBody @Valid DatosReservaConsulta datosReservaConsulta) {
-        System.out.println(datosReservaConsulta);
         return ResponseEntity.ok(new DatosDetalleConsulta(null, null, null, null));
     }
 }
