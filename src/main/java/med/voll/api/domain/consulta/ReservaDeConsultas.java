@@ -30,6 +30,10 @@ public class ReservaDeConsultas {
             throw new ValidacionException("No existe un Médico con el id informado");
         }
 
+        // Validaciones
+        
+
+
 //        var médico = medicoRepository.findById(datosReservaConsulta.idMedico()).get(); // esto puede ser null mejor lo reemplazo por:
         var medico = elegirMedico(datosReservaConsulta);
         var paciente = pacienteRepository.findById(datosReservaConsulta.idPaciente()).get();
