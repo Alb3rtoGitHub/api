@@ -1,7 +1,8 @@
 package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.ValidacionException;
-import med.voll.api.domain.consulta.validaciones.ValidadorDeConsultas;
+import med.voll.api.domain.consulta.validaciones.cancelaciones.ValidadorCancelarConsulta;
+import med.voll.api.domain.consulta.validaciones.reservas.ValidadorDeConsultas;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
@@ -24,6 +25,9 @@ public class ReservaDeConsultas {
 
     @Autowired
     List<ValidadorDeConsultas> validadores; // usar una lista de Interfaces, spring busca todas las clases que implementan esta interfaz y crea una lista
+
+    @Autowired
+    private List<ValidadorCancelarConsulta> validadorCancelarConsultas;
 
     public DatosDetalleConsulta reservar(DatosReservaConsulta datosReservaConsulta){
 
@@ -67,6 +71,8 @@ public class ReservaDeConsultas {
         if (!consultaRepository.existsById(datosCancelarConsulta.idConsulta())){
             throw new ValidacionException("No existe un Consulta con el id informado");
         }
+
+        validadorCancelarConsultas.forEach(v -> v.validar(datosCancelarConsulta));
         var consulta = consultaRepository.getReferenceById(datosCancelarConsulta.idConsulta());
         consulta.cancelar(datosCancelarConsulta.motivoCancelacion());
     }

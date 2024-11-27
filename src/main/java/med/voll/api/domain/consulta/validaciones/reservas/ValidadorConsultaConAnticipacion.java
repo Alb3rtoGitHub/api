@@ -1,4 +1,4 @@
-package med.voll.api.domain.consulta.validaciones;
+package med.voll.api.domain.consulta.validaciones.reservas;
 
 import med.voll.api.domain.ValidacionException;
 import med.voll.api.domain.consulta.DatosReservaConsulta;
@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
-public class ValidadorConsultaConAnticipacion implements ValidadorDeConsultas{
+public class ValidadorConsultaConAnticipacion implements ValidadorDeConsultas {
 
     public void validar(DatosReservaConsulta datosReservaConsulta) {
         var fechaConsulta = datosReservaConsulta.fecha();
