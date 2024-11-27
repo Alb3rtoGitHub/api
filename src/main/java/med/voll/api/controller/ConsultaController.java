@@ -21,9 +21,9 @@ public class ConsultaController {
     @Transactional
     public ResponseEntity reservar(@RequestBody @Valid DatosReservaConsulta datosReservaConsulta) {
 
-        reservaDeConsultas.reservar(datosReservaConsulta);
+        var datosDetalleConsulta = reservaDeConsultas.reservar(datosReservaConsulta);
 
-        return ResponseEntity.ok(new DatosDetalleConsulta(null, null, null, null));
+        return ResponseEntity.ok(datosDetalleConsulta);
     }
 
     @DeleteMapping
