@@ -29,7 +29,7 @@ public class MedicoController {
         Medico medico = medicoRepository.save(new Medico(datosRegistroMedico));
         // Debera retornar código 201 Created y la URL donde encontrar el médico ej: GET http://localhost:8080/medicos/id
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico.getId(), medico.getNombre(), medico.getEmail(),
-                medico.getTelefono(), medico.getEspecialidad().toString(),
+                medico.getTelefono(), medico.getDocumento(), medico.getEspecialidad(),
                 new DatosDireccion(medico.getDireccion().getCalle(), medico.getDireccion().getDistrito(),
                         medico.getDireccion().getCiudad(), medico.getDireccion().getNumero(),
                         medico.getDireccion().getComplemento()));
@@ -57,7 +57,7 @@ public class MedicoController {
         Medico medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
         medico.actualizarDatos(datosActualizarMedico);
         return ResponseEntity.ok(new DatosRespuestaMedico(medico.getId(), medico.getNombre(), medico.getEmail(),
-                medico.getTelefono(), medico.getEspecialidad().toString(),
+                medico.getTelefono(), medico.getDocumento(), medico.getEspecialidad(),
                 new DatosDireccion(medico.getDireccion().getCalle(), medico.getDireccion().getDistrito(),
                         medico.getDireccion().getCiudad(), medico.getDireccion().getNumero(),
                         medico.getDireccion().getComplemento()))); // retorna el código 200 y el objeto como DTO
@@ -84,7 +84,7 @@ public class MedicoController {
     public ResponseEntity<DatosRespuestaMedico> retornaDatosMedico(@PathVariable Long id) {
         Medico medico = medicoRepository.getReferenceById(id);
         var datosMedico = new DatosRespuestaMedico(medico.getId(), medico.getNombre(), medico.getEmail(),
-                medico.getTelefono(), medico.getEspecialidad().toString(),
+                medico.getTelefono(), medico.getDocumento(), medico.getEspecialidad(),
                 new DatosDireccion(medico.getDireccion().getCalle(), medico.getDireccion().getDistrito(),
                         medico.getDireccion().getCiudad(), medico.getDireccion().getNumero(),
                         medico.getDireccion().getComplemento()));

@@ -33,7 +33,7 @@ class MedicoControllerTest {
     private JacksonTester<DatosRegistroMedico> datosRegistroMedicoJson;
 
     @Autowired
-    private JacksonTester<DatosDetalleMedico> datosDetalleMedicoJson;
+    private JacksonTester<DatosRespuestaMedico> datosRespuestaMedicoJson;
 
     @MockBean
     private MedicoRepository medicoRepository;
@@ -67,17 +67,16 @@ class MedicoControllerTest {
                 .content(datosRegistroMedicoJson.write(datosRegistroMedico).getJson()))
                 .andReturn().getResponse();
 
-        var datosDetalleMedico = new DatosDetalleMedico(
+        var datosRespuestaMedico = new DatosRespuestaMedico(
                 null,
                 datosRegistroMedico.nombre(),
                 datosRegistroMedico.email(),
-                datosRegistroMedico.documento(),
                 datosRegistroMedico.telefono(),
+                datosRegistroMedico.documento(),
                 datosRegistroMedico.especialidad(),
                 datosRegistroMedico.direccion()
-//                datosRegistroMedico.direccion()
         );
-        var jsonEsperado = datosDetalleMedicoJson.write(datosDetalleMedico).getJson();
+        var jsonEsperado = datosRespuestaMedicoJson.write(datosRespuestaMedico).getJson();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
