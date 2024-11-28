@@ -1,7 +1,5 @@
 package med.voll.api.controller;
 
-import lombok.With;
-import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.DatosDetalleConsulta;
 import med.voll.api.domain.consulta.DatosReservaConsulta;
 import med.voll.api.domain.consulta.ReservaDeConsultas;
