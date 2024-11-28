@@ -19,36 +19,39 @@ import java.time.temporal.TemporalAdjusters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@DataJpaTest // para probar los metodos qus usan JPA
+// En el caso de usar una BD en memoria como H2 sera necesario agregar esa dependencia y sacar @AutoConfigureTestDatabase, @ActiveProfiles y el archivo application-test.properties
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("test")
+// para usar la misma BD que usamos en nuestro sistema -> Replace.NONE
+@ActiveProfiles("test") // para indicarle el contexto que debe usar en application-<contexto>.properties -> test y alli debe esta la BD de test similar a nuestra BD original
 class MedicoRepositoryTest {
 
     @Autowired
-    private MedicoRepository medicoRepository;
+    private MedicoRepository medicoRepository; // nos permite acceder a la BD
 
     @Autowired
-    private EntityManager em;
+    private EntityManager em; // me permite acceder a los repositories que usen mis variables asi no importo uno por uno
 
     @Test
-    @DisplayName("Debería devolver null cuando el medico buscado existe pero no esta disponible en esa fecha")
+    @DisplayName("Debería devolver null cuando el medico buscado existe pero no esta disponible en esa fecha") // esta anotación permite colocar un nombre aclarando de que trata este test
     void elegirMedicoDisponibleEnLaFechaEscenario1() {
         // given o arrange
-        var lunesSiguienteALas10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10,0);
+        var lunesSiguienteALas10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0); // variable fecha que contemple hoy + un tiempo de ajuste
+        // Vamos a llenar nuestra BD con el escenario a probar: un médico, un paciente y una consulta en el horario que quiero testear indisponibilidad
         var medico = registrarMedico("Medico1", "medico@gmail.com", "123456", Especialidad.CARDIOLOGIA);
         var paciente = registrarPaciente("Paciente1", "paciente@gmail.com", "243456");
         registrarConsulta(medico, paciente, lunesSiguienteALas10);
-        // when o act
-        var medicoLibre = medicoRepository.elegirMedicoDisponibleEnLaFecha(Especialidad.CARDIOLOGIA, lunesSiguienteALas10);
+        // when o act -> ejecuto la consulta con misma especialidad y fecha para luego comparar con assertThat
+        var medicoLibre = medicoRepository.elegirMedicoDisponibleEnLaFecha(Especialidad.CARDIOLOGIA, lunesSiguienteALas10); // variable fecha que no quede vieja para hacer pruebas en el futuro
         // then o assert
-        assertThat(medicoLibre).isNull();
+        assertThat(medicoLibre).isNull(); //probar que el médico estaba ocupado en esa fecha
     }
 
     @Test
     @DisplayName("Debería devolver medico cuando el medico buscado esta disponible en esa fecha")
     void elegirMedicoDisponibleEnLaFechaEscenario2() {
         // given o arrange
-        var lunesSiguienteALas10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10,0);
+        var lunesSiguienteALas10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
         var medico = registrarMedico("Medico1", "medico@gmail.com", "123456", Especialidad.CARDIOLOGIA);
         // when o act
         var medicoLibre = medicoRepository.elegirMedicoDisponibleEnLaFecha(Especialidad.CARDIOLOGIA, lunesSiguienteALas10);
@@ -56,8 +59,9 @@ class MedicoRepositoryTest {
         assertThat(medicoLibre).isEqualTo(medico);
     }
 
+    // Métodos privados necesarios para varios tests
     private void registrarConsulta(Medico medico, Paciente paciente, LocalDateTime fecha) {
-        em.persist(new Consulta(null,medico, paciente, fecha, null));
+        em.persist(new Consulta(null, medico, paciente, fecha, null));
     }
 
     private Medico registrarMedico(String nombre, String email, String documento, Especialidad especialidad) {
@@ -73,7 +77,7 @@ class MedicoRepositoryTest {
     }
 
     private DatosRegistroMedico datosMedico(String nombre, String email, String documento, Especialidad especialidad) {
-        return  new DatosRegistroMedico(
+        return new DatosRegistroMedico(
                 nombre,
                 email,
                 "6145489789",
@@ -84,7 +88,7 @@ class MedicoRepositoryTest {
     }
 
     private DatosRegistroPaciente datosPaciente(String nombre, String email, String documento) {
-        return  new DatosRegistroPaciente(
+        return new DatosRegistroPaciente(
                 nombre,
                 email,
                 "1234564",
@@ -94,7 +98,7 @@ class MedicoRepositoryTest {
     }
 
     private DatosDireccion datosDireccion() {
-        return  new DatosDireccion(
+        return new DatosDireccion(
                 "calle x",
                 "distrito y",
                 "ciudad z",
